@@ -12,7 +12,7 @@ public class OsrmProjectApplication {
 		SpringApplication.run(OsrmProjectApplication.class, args);
 		Analyist analyist = new Analyist();
 
-
+		int n = 1;
 		String place1 = "55/15 Trần Hưng Đạo, Thành phố Hồ Chí Minh";
 		String place2 = "ÆON MALL Bình Tân, 1, Đường số 17A, Phường Bình Trị Đông B, Quận Bình Tân, Thành phố Hồ Chí Minh, 73118, Việt Nam";
 		String transportation = "walking";

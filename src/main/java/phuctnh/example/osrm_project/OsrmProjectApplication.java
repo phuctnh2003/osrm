@@ -2,11 +2,12 @@ package phuctnh.example.osrm_project;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import java.util.ArrayList;
 
 @SpringBootApplication
-public class OsrmProjectApplication {
+public class OsrmProjectApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OsrmProjectApplication.class, args);

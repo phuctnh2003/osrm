@@ -102,12 +102,12 @@ public class Analyist {
                 } else// Neu cu phap hem dau` sai thi chuyen qua dang moi
                 {
                     String analyzestr = locationName.replace("Hẻm", "").trim();
-                    System.out.println(analyzestr);
+
                     int vt = analyzestr.indexOf("/");
                     if (vt != -1) {
                         String str1 = analyzestr.substring(0, vt);
                         String str2 = analyzestr.substring(analyzestr.indexOf(" "));
-                        System.out.println("Hẻm " + str1 + str2);
+
                         return "Hẻm " + str1 + str2;
                     }
                 }

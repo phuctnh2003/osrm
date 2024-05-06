@@ -4,25 +4,28 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Analyist {
     private final double HCM_LATITUDE = 10.776390;
     private final double HCM_LONGITUDE = 106.701139;
 
-    public ArrayList<Double> getPlace(String locationName) {
-        ArrayList<Double> list = new ArrayList<>();
 
+    public ArrayList<Location> getPlace(String locationName) {
+        ArrayList<Location> list = new ArrayList<>();
         try {
-            String encodedLocationName = URLEncoder.encode(tokenLocation(locationName), "UTF-8");
+            String encodedLocationName = URLEncoder.encode(tokenLocation(locationName.toLowerCase()), "UTF-8");
             String urlString = "https://nominatim.openstreetmap.org/search?format=json&q=" + encodedLocationName + "&bounded=1";
             URL url = new URL(urlString);
-            System.out.println(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -37,23 +40,21 @@ public class Analyist {
             }.getType();
             ArrayList<Location> res = gson.fromJson(response.toString(), type);
             if (res != null && !res.isEmpty()) {
+                boolean flag = false; // kiem tra dia diem gan HCM neu khong ton tai thi` chuyen qua
                 for (Location loc : res) {
                     if (checkHCM(loc.getLat(), loc.getLon())) {
-                        list.add(loc.getLat());
-                        list.add(loc.getLon());
-                        System.out.println("dung");
-                        System.out.println(loc.getLat());
-                        System.out.println(loc.getLon());
+                        list.add(loc);
+                        flag = true;
                         break;
                     }
-                    else
-                    {
-                        System.out.println("sai");
+                }
+                if (!flag) {
+                    for (Location loc : res) {
+                        list.add(loc);
                     }
-
                 }
             } else {
-                System.out.println("Không tìm thấy địa điểm");
+                System.out.println("Địa điểm không tồn tại");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,10 +63,11 @@ public class Analyist {
     }
 
 
-    public String getRoute(double startLatitude, double startLongitude, double endLatitude, double endLongitude, String profile) {
+    public String getRoute(String startLatitude, String startLongitude, String endLatitude, String endLongitude, String profile) {
         StringBuilder response = new StringBuilder();
         try {
             String urlString = "https://router.project-osrm.org/route/v1/" + profile + "/" + startLongitude + "," + startLatitude + ";" + endLongitude + "," + endLatitude + "?overview=false";
+            System.out.println(urlString + "\n" + profile);
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -87,6 +89,7 @@ public class Analyist {
             try {
                 String encodedLocationName = URLEncoder.encode(locationName, "UTF-8");
                 String urlString = "https://nominatim.openstreetmap.org/search?format=json&q=" + encodedLocationName + "&bounded=1";
+                System.out.println(urlString);
                 URL url = new URL(urlString);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -107,7 +110,6 @@ public class Analyist {
                     if (vt != -1) {
                         String str1 = analyzestr.substring(0, vt);
                         String str2 = analyzestr.substring(analyzestr.indexOf(" "));
-
                         return "Hẻm " + str1 + str2;
                     }
                 }
@@ -118,9 +120,21 @@ public class Analyist {
         return location;
     }
 
+    public History getHistory(String searchword, String keyword, String latitude, String longitude)
+    {
+        History history = new History();
+        history.setId(UUID.randomUUID().toString());
+        history.setSearchword(searchword);
+        history.setKeyword(keyword);
+        history.setLatitude(latitude);
+        history.setLongitude(longitude);
+        history.setTime(new Timestamp(System.currentTimeMillis()));
+        return history;
+    }
+
     // Giả su GPS
-    private boolean checkHCM(double latitude, double longitude) {
+    private boolean checkHCM(String latitude, String longitude) {
         double epsilon = 0.1;
-        return Math.abs(latitude - HCM_LATITUDE) < epsilon && Math.abs(longitude - HCM_LONGITUDE) < epsilon;
+        return Math.abs(Double.parseDouble(latitude) - HCM_LATITUDE) < epsilon && Math.abs((Double.parseDouble(longitude)) - HCM_LONGITUDE) < epsilon;
     }
 }

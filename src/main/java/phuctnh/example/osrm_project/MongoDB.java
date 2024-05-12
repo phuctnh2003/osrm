@@ -15,7 +15,7 @@ public class MongoDB {
     private String host = "database.neosoft.vn";
     private int port = 27017;
     private String databaseName = "neodb";
-    private String collectionName = "phuctnh_placesearch";
+    private String collectionName = "placesearch_history";
     private String connectionString = "mongodb://" + username + ":" + password + "@" + host + ":" + port + "/" + databaseName;
 
     public void insertHistory(History history)

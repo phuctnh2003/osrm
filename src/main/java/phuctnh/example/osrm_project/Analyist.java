@@ -67,7 +67,6 @@ public class Analyist {
         StringBuilder response = new StringBuilder();
         try {
             String urlString = "https://router.project-osrm.org/route/v1/" + profile + "/" + startLongitude + "," + startLatitude + ";" + endLongitude + "," + endLatitude + "?overview=false";
-            System.out.println(urlString + "\n" + profile);
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -120,8 +119,7 @@ public class Analyist {
         return location;
     }
 
-    public History getHistory(String searchword, String keyword, String latitude, String longitude)
-    {
+    public History getHistory(String searchword, String keyword, String latitude, String longitude) {
         History history = new History();
         history.setId(UUID.randomUUID().toString());
         history.setSearchword(searchword);
@@ -131,6 +129,7 @@ public class Analyist {
         history.setTime(new Timestamp(System.currentTimeMillis()));
         return history;
     }
+
 
     // Giả su GPS
     private boolean checkHCM(String latitude, String longitude) {

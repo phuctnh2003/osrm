@@ -11,7 +11,7 @@ public class OsrmProjectApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OsrmProjectApplication.class, args);
-		Analyist analyist = new Analyist();
+		/*Analyist analyist = new Analyist();
 
 
 		String place1 = "Ben Xe Mien Tay";
@@ -30,6 +30,12 @@ public class OsrmProjectApplication extends SpringBootServletInitializer {
 		String routeInfo = analyist.getRoute(start.get(0).getLat(), start.get(0).getLon(), end.get(0).getLat(), end.get(0).getLon(), transportation);
 
 		System.out.println(routeInfo);
+
+		 */
+		SQL sql = new SQL();
+//sql.Drop_History();
+//	sql.Create_History();
+
 	}
 }
 
